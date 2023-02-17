@@ -1,0 +1,21 @@
+{
+    "name": "cacio/prodfirebird",
+    "description": "Conexão firebird driver",
+    "type": "src",
+    "require": {
+        "php": "^7.2",
+        "ext-pdo": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cacio\\ProdFirebird\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cacio Silva",
+            "email": "caciorenato@gmail.com"
+        }
+    ]
+}
