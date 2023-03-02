@@ -12,7 +12,7 @@
 
     $modelcli = new Cliente();
 
-    $modelcli->select('CLIENTES');
+    $modelcli->select();
     $modelcli->execute();
 
 

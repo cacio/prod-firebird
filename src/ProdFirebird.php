@@ -14,9 +14,13 @@
         private $result;
         private $bind_param = array();
         private $reserved_words = array('CURRENT_TIMESTAMP', 'CURRENT_TIME', 'CURRENT_USER');
+         /** @var string $entity database table */
+        private $entity;
 
+        public function __construct(string $entity){
+            
+            $this->entity = $entity;
 
-        public function __construct(){
             $this->connect(
                     DATA_FIREBIRD_CONFIG['hostname'],
                     DATA_FIREBIRD_CONFIG['database'],
@@ -39,7 +43,7 @@
         }
 
 
-        public function select($table, $column='*', $where=null, $order=null){
+        public function select($column='*', $where=null, $order=null){
             $selectcolumnkeys = "";
             $selectcolumnwhere = "";
             $selectcolumnorder = "";
@@ -72,10 +76,10 @@
                 }
                 $selectcolumnorder = "ORDER BY " . implode(",", $selectorder);
             }
-            $this->sql = "SELECT {$selectcolumnkeys} FROM {$table} {$selectcolumnwhere} {$selectcolumnorder}";
+            $this->sql = "SELECT {$selectcolumnkeys} FROM {$this->entity} {$selectcolumnwhere} {$selectcolumnorder}";
         }
 
-        public function update($table, $data, $where=null){
+        public function update($data, $where=null){
             $updatecolumndata = "";
             $updatecolumnwhere = "";
             $updatedata = array();
@@ -104,10 +108,10 @@
                 }
                 $updatecolumnwhere = "WHERE " . implode(" AND ", $updatewhere);
             }
-            $this->sql = "UPDATE {$table} SET {$updatecolumndata} {$updatecolumnwhere}";
+            $this->sql = "UPDATE {$this->entity} SET {$updatecolumndata} {$updatecolumnwhere}";
         }
 
-        public function insert($table, $data){
+        public function insert($data){
             $insertdata = array();
             foreach($data as $key => $value){
                 if(in_array($value, $this->reserved_words)){
@@ -120,11 +124,11 @@
             }
             $insertcolumnkeys = implode(",", array_keys($insertdata));
             $insertcolumndata = implode(",", $insertdata);
-            $this->sql = "INSERT INTO {$table} ({$insertcolumnkeys}) VALUES({$insertcolumndata})";
+            $this->sql = "INSERT INTO {$this->entity} ({$insertcolumnkeys}) VALUES({$insertcolumndata})";
         }
 
 
-        public function delete($table, $where=null){
+        public function delete($where=null){
             $deletewhere = array();
             foreach($where as $key => $value){
                 if(in_array($value, $this->reserved_words)){
@@ -136,7 +140,7 @@
                 }
             }
             $deletecolumnwhere = "WHERE " . implode(" AND ", $deletewhere);
-            $this->sql = "DELETE FROM {$table} {$deletecolumnwhere}";
+            $this->sql = "DELETE FROM {$this->entity} {$deletecolumnwhere}";
         }
 
         public function query($sql){
